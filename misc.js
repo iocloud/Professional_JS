@@ -34,7 +34,7 @@ function chunk(array, process, context){
   }, 100);
 }
 
-// 自定义事件 亦称 pubsub模式
+// 自定义事件 OR pubsub模式
 function EventTarget(){
   this.handlers = {};
 }
@@ -106,3 +106,69 @@ inheritPrototype(Person, EventTarget);
 Person.prototype.say = function(message){
   this.fire({type: 'message', message: message});
 }
+
+
+//拖放
+var DragDrop = function(){
+  var dragging = null,
+      dragdrop = new EventTarget,
+      diffX = 0,
+      diffY = 0;
+  function handleEvent(event){
+    //获取事件和目标
+    event = event || window.event;
+    var target= event.target || event.srcElement;
+    //确定事件类型
+    switch(event.type){
+    case 'mousedown':
+      if(target.className.indexOf('draggable') > -1){
+        dragging = target;
+        diffX = event.clientX - target.offsetLeft;
+        diffY = event.clientY - target.offsetTop;
+        drapdrop.fire({type: 'dragstart', target: dragging, x: event.clientX, y: event.clientY});
+      }
+      break;
+    case 'mouseup':
+      dragdrop.fire({type: 'dragend', target: dragging, x: event.clientX, y: event.clientY});
+      dragging = null;
+      break;
+    case 'mousemove':
+      if(dragging !== null){
+        //get event
+        event = event || window.event;
+        //assign location
+        dragging.style.left = (event.clientX - diffX) + 'px';
+        dragging.style.top = (event.clientY - diffY) + 'px';
+        //触发自定义事件
+        dragdrop.fire({type: 'drag', target: dragging, x: event.clientX, y: event.clientY});
+      }
+      break;
+    }
+  }
+  //公共接口
+ dragdrop.enable = function(){
+    if(document.addEventListener){
+      document.addEventListener('mousedown', handleEvent, false);
+      document.addEventListener('mouseup',   handleEvent, false);
+      document.addEventListener('mousemove', handleEvent, false);
+    }else{
+      document.attach('onmousedown', handleEvent);
+      document.attach('onmouseup', handleEvent);
+      document.attach('onmousemove', handleEvent);
+    }
+  };
+  dragdrop.disable = function(){
+    if(document.removeEventListener){
+      document.removeEventListener('mousedown', handleEvent, false);
+      document.removeEventListener('mouseup',   handleEvent, false);
+      document.removeEventListener('mousemove', handleEvent, false);
+    }else{
+      document.detach('onmousedown', handleEvent);
+      document.detach('onmouseup', handleEvent);
+      document.detach('onmousemove', handleEvent);
+    }
+  };
+  return dragdrop;
+  };
+};
+
