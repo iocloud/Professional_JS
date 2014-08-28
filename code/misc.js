@@ -5,7 +5,7 @@ var processor = {
   performProcessing: function(){
   },
   // 初始处理调用的方法
-  process: function(array, process, context){
+  process: function(){
     clearTimeout(this.timeoutId);
     var that = this;
     this.timeoutId = setTimeout(function(){
