@@ -49,7 +49,7 @@ EventTarget.prototype = {
   removeHandler: function(type, handler){
     if(this.handlers[type] instanceof Array){
       var handlers = this.handlers[type];
-      for(var i = o, max = handlers.length; i < max; i++){
+      for(var i = 0, max = handlers.length; i < max; i++){
         if(handlers[i] === handler){
           break;
         }
