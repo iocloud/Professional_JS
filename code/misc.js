@@ -1,3 +1,7 @@
+/*|
+|*| 临时代码
+|*/
+
 // 函数节流
 var processor = {
   timeoutId: null,
