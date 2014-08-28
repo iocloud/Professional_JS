@@ -170,5 +170,5 @@ var DragDrop = function(){
   };
   return dragdrop;
   };
-};
+}();
 
