@@ -71,6 +71,7 @@ EventTarget.prototype = {
 };
 
 //用法
+/*
 //创建一个新对象
 var target = new EventTarget;
 
@@ -86,13 +87,14 @@ target.removeHandler('message', handleMessage);
 function handleMessage(event){
   alert('Message received: ' + event.message || 'is null');
 }
+*/
 
 //或者其他对象可以继承EventTarget
 
 //寄生组合式继承
 function inheritPrototype(subType, superType){
   var prototype = superType.prototype;
-  prototype.constructor = subType;
+  //prototype.constructor = subType;
   subType.prototype = prototype;
 }
 
