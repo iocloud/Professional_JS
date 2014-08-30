@@ -17,5 +17,10 @@ JS需要一个标准的方法来解决加载外部模块和用命名空间的方
 随着邮件列表(https://groups.google.com/group/commonjs)的建立，CommonJS(http://wiki.commonjs.org/wiki/CommonJS)诞生了。它包含了很多标准，包括IO接口、底层的套接字流,以及单元测试。
 
 
+模块与浏览器
+
+客户端实现的模块加载器和服务器端有所不同，在服务器端实现CommonJS规范，但在浏览器实现CommonJS则不那么容易，因为它需要阻塞UI并适时地执行刚加载的script脚本（在客户端则需要避免这种情况的出现）。CommonJS团队为此提出了一个规范：”模块转换格式“。这种转换格式将CommonJS的模块包装在一个回调函数中，以便更好地处理客户端地异步加载。
+
+
 
 
