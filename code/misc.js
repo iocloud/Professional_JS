@@ -178,3 +178,48 @@ var DragDrop = function(){
   };
 }();
 
+
+function extend(o,p){
+	for(var prop in p){
+		o[prop] = p[prop];
+	}
+	return o;
+}
+function inherit(p){
+	if(Object.create){
+		return Object.create(p);
+	}
+	if(typeof p !== 'object'){
+		return false;
+	}
+	function F(){}
+	F.prototype = p;
+	F.uber = p;
+	return new F();
+}
+function merge(o,p){
+	for(var prop in p){
+		if(o.hasOwnProperty(prop)){
+			continue;
+		}
+		o[prop] = p[prop];
+	}
+	return o;
+}
+function restrict(o,p){
+	for(var prop in o){
+		if(!(prop in o)){
+			delete o[prop];
+		}
+	}
+	return o;
+}
+function substrace(o,p){
+	for(var prop in o){
+		if(prop in o){
+			delete o[prop];
+		}
+	}
+	return o;
+}
+
