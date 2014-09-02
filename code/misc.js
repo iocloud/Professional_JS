@@ -2,6 +2,52 @@
 |*| 临时代码
 |*/
 
+//发布/订阅模式
+
+var publisher = {
+  subscribers: {any: []},
+  on: function(type, fn, context) {
+    type = type || 'any';
+      fn = typeof fn == 'function' ? fn : context[fn];
+      if(typeof this.subscribers[type] == 'undefined'){
+        this.subscribers[type] = [];
+      }
+      this.subscribers[type].push({fn:fn, context: context||this});
+  },
+  off: function(type, fn, context) {
+    this.visitSubscribers('unsubscribe', type, fn, context);
+  },
+  fire: function(type, publication) {
+    this.visitSubscribers('publish', type, publication);
+  },
+  visitSubscribers: function(action, type, arg, context) {
+    var pubtype = type || 'any',
+    i,
+    subscribers = this.subscribers[pubtype],
+    max = subscribers ? subscribers.length : 0;
+    for(i = 0; i < max; i++){
+      if(action === 'publish'){
+        subscribers[i].fn.call(subscribers[i].context, arg);
+      }else{
+        if(subscribers[i].fn === arg && subscribers[i].context === context){
+          subscribers[i].splice(i,1);
+        }
+      }
+    }
+  }
+};
+
+function makePublisher(o){
+  for(var i in publisher){
+    if(publisher.hasOwnProperty(i) && typeof publisher[i] == 'function'){
+      o[i] = publisher[i];
+    }
+  }
+  o.subscribers = {any: []};
+}
+
+
+
 // 函数节流
 var processor = {
   timeoutId: null,
@@ -180,46 +226,47 @@ var DragDrop = function(){
 
 
 function extend(o,p){
-	for(var prop in p){
-		o[prop] = p[prop];
-	}
-	return o;
+  for(var prop in p){
+    o[prop] = p[prop];
+  }
+  return o;
 }
 function inherit(p){
-	if(Object.create){
-		return Object.create(p);
-	}
-	if(typeof p !== 'object'){
-		return false;
-	}
-	function F(){}
-	F.prototype = p;
-	F.uber = p;
-	return new F();
+  if(Object.create){
+    return Object.create(p);
+  }
+  if(typeof p !== 'object'){
+    return false;
+  }
+  function F(){}
+  F.prototype = p;
+  F.uber = p;
+  return new F();
 }
 function merge(o,p){
-	for(var prop in p){
-		if(o.hasOwnProperty(prop)){
-			continue;
-		}
-		o[prop] = p[prop];
-	}
-	return o;
+  for(var prop in p){
+    if(o.hasOwnProperty(prop)){
+      continue;
+    }
+    o[prop] = p[prop];
+  }
+  return o;
 }
 function restrict(o,p){
-	for(var prop in o){
-		if(!(prop in o)){
-			delete o[prop];
-		}
-	}
-	return o;
+  for(var prop in o){
+    if(!(prop in o)){
+      delete o[prop];
+    }
+  }
+  return o;
 }
 function substrace(o,p){
-	for(var prop in o){
-		if(prop in o){
-			delete o[prop];
-		}
-	}
-	return o;
+  for(var prop in o){
+    if(prop in o){
+      delete o[prop];
+    }
+  }
+  return o;
 }
+
 
