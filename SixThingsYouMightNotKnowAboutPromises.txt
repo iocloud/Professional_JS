@@ -121,3 +121,49 @@ then(
 Promises can be seen as layers on an onion. Each then() adds another layer to the onion. Each layer represents one activity
 that can be handle. After that layer is over, the result is assumed to be fixed and ready for the next layer.
 
+
+5. Promise can be paused
+
+Just because you are already executing inside a then() function,
+doesn't mean you can't pause it to complete something else first.
+To pause the current promise, or to have it wait for the completion
+of another promise, simply return another promise from with then().
+
+var p = new Promise(/*...*/);
+ 
+p.then(function(str) {
+  if(!loggedIn) {
+    return new Promise(/*...*/);
+  }
+})
+.then(function(str) {
+  alert("Done.");
+})
+
+In the previous code sample, the alert will not be shown until the
+new promise has been resolved. This is a convenient way to introduce
+additional dependencies inside an existing asynchronous code path.
+For example, you may find that the user session has timed out and
+you may want to initiate a seconary login before continuing on with
+the previous code path.
+
+
+6. Resolved promises don't execute immediately
+
+What gets alerts when you run the following code?
+
+function runme(){
+	 var i = 0;
+	 new Promise(function(resolve){
+		  resolve()
+	 }).then(function(){
+		  i += 2;
+	 });
+	 alert(i);
+}
+
+You may think it will alert 2, since the promises is resolved
+immediately and the then() function is executed immediately(
+asynchronously). However, the promises specification requires
+all calls to be forcefully asynchronous in an effort to be uniform.
+Therefore, the alert is called before the value of i is modified.
