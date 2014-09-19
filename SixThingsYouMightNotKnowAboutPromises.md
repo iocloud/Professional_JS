@@ -161,3 +161,5 @@ function runme(){
 You may think it will alert 2, since the promises is resolved immediately and the then() function is executed immediately
 (asynchronously). However, the promises specification requires all calls to be forcefully asynchronous in an effort to be 
 uniform.Therefore, the alert is called before the value of i is modified.
+
+<a href="https://github.com/promises-aplus/promises-spec/blob/master/implementations.md">Promise/A+ API</a>
