@@ -1,11 +1,11 @@
-Six Things You Might Not Know About Promises
+<h3>Six Things You Might Not Know About Promises</h3>
 
 Promises are a simple concept, and even if you haven’t had a chance to use them, you may have already read up on them. 
 They are a valuable construct that enables asynchronous code to be structured in a more readable fasion, rather than 
 as a mess of nested anonymous functions. This article touches on six things that you might not know about promises.
 
 Before diving into the list, here is a quick reminder of what JavaScript promises look like:
-
+<code>
 var p = new Promise(function(resolve, reject) {
   resolve("hello world");
 });
@@ -13,11 +13,12 @@ var p = new Promise(function(resolve, reject) {
 p.then(function(str){
   alert(str);
 });
-
+</code>
+<hr>
 1. then() Returns a Forked Promise
 
 What is the difference between the following two blocks of code?
-
+<hr>
 //Exhibit A
 
 var p = new Promise(/*...*/);
@@ -27,7 +28,7 @@ p.then(fn2);
 //Exhibit B
 var p = new Promise(/*...*/);
 p.then(fn1).then(fn2);
-
+<hr>
 If you think both code blocks are equivalent, you may be thinking that promises are nothing more than one-dimensional
 arrays of callbacks. However, that is not actually the case. Every call to then() returns a forked promise. So, in
 Exhibit A, if fn1() throws an exception, fn2() will still be called as normal.
@@ -40,7 +41,7 @@ The takeaway: promises can fork into multiple paths like a complex flow chart.
 2. Callbacks should pass results
 
 What gets alerts when you run the following code?
-
+<hr>
 var p = new Promise(function(resolve, reject){
   resolve('hello, world');
 });
@@ -67,7 +68,7 @@ then(function	(metres)	{
 3. Only exceptions from previous levels are caught
 
 What is the difference between these two code blocks:
-
+<hr>
 //Exhibit A
 new Promise(function(resolve, reject){
   resolve('hello, world');
@@ -106,7 +107,7 @@ promise itself throw an exception.
 Inside an error callback, if you don't re-throw the error, the promise will assume that you're recovered from the error
 and will revert to the resolved state. In the following example, "I am saved" is displayed because the error callback in
 the first then() did not re-throw the exception.
-
+<hr>
 var p = new Promise(function(resolve, reject){
   reject(new Error('pebkac'););
 });
@@ -127,7 +128,7 @@ that can be handle. After that layer is over, the result is assumed to be fixed 
 Just because you are already executing inside a then() function, doesn't mean you can't pause it to complete something else 
 first.To pause the current promise, or to have it wait for the completion of another promise, simply return another promise 
 from with then().
-
+<hr>
 var p = new Promise(/*...*/);
  
 p.then(function(str) {
@@ -147,7 +148,7 @@ session has timed out and you may want to initiate a seconary login before conti
 6. Resolved promises don't execute immediately
 
 What gets alerts when you run the following code?
-
+<hr>
 function runme(){
 	 var i = 0;
 	 new Promise(function(resolve){
@@ -162,4 +163,4 @@ You may think it will alert 2, since the promises is resolved immediately and th
 (asynchronously). However, the promises specification requires all calls to be forcefully asynchronous in an effort to be 
 uniform.Therefore, the alert is called before the value of i is modified.
 
-<a href="https://github.com/promises-aplus/promises-spec/blob/master/implementations.md">Promise/A+ API</a>
+Various implementations of the<a href="https://github.com/promises-aplus/promises-spec/blob/master/implementations.md">Promise/A+ API</a>
