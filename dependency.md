@@ -8,13 +8,13 @@ JavaScript缺失了很多计算机高级编程语言所应有的功能特性，�
 
 CommonJS
 
-当大家开始关注如何将JS应用于服务器端时，引入了很多解决依赖管理问题的建议方法。SpiderMonkey(https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey) 和Rhine(https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino) 提供了load()函数，但并没有很好的解决命名空间的问题。Node.js(http://nodejs.org)提供了require()函数，用来加载外部资源文件，Node.js自有的模块系统也使用这种方式来管理。但代码的可移植性不好。
+当大家开始关注如何将JS应用于服务器端时，引入了很多解决依赖管理问题的建议方法。<a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey"><span>SpiderMonkey</span></a> 和<a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino"><span>Rhine</span></a> 提供了load()函数，但并没有很好的解决命名空间的问题。<a href="http://nodejs.org"><span>Node.js</span></a>提供了require()函数，用来加载外部资源文件，Node.js自有的模块系统也使用这种方式来管理。但代码的可移植性不好。
 
 为了让代码更具可移植性，亟需引入一个标准解决方案，让所有JS都能遵照这个标准来实现统一的模块管理系统，这样JS代码库就可以运行在所有的环境中。Kevini Dangoor按照这个思路提出了CommonJS规范。他在博客首次提出了一个公开的标准，这标准适用于JS解释器和开发者，他对此做了一个说明：
 JS需要一个标准的方法来解决加载外部模块和用命名空间的方式谨慎管理模块的问题。命名空间的问题很容易解决。但并没有标准的编程模式来（一次性）解决加载模块的问题。
 这不是一个技术问题，而是需要我们在一起共同讨论并达成一致————给出构建大型应用的通用方法，群策群力才能让这个标准影响范围更大、看起来更酷。
 
-随着邮件列表(https://groups.google.com/group/commonjs)的建立，CommonJS(http://wiki.commonjs.org/wiki/CommonJS)诞生了。它包含了很多标准，包括IO接口、底层的套接字流,以及单元测试。
+随着<a href="https://groups.google.com/group/commonjs"><span>邮件列表</span></a>的建立，<a href="http://wiki.commonjs.org/wiki/CommonJS"><span>CommonJS</span></a>诞生了。它包含了很多标准，包括IO接口、底层的套接字流,以及单元测试。
 
 
 模块与浏览器
