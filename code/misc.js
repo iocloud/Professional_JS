@@ -268,5 +268,7 @@ function substrace(o,p){
   }
   return o;
 }
-
+function isNative(fn){
+  return (/\{\s*\[native code\]\s*\}/).test(''+fn);
+}
 
