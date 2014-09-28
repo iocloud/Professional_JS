@@ -2,7 +2,7 @@
 ***
 
 *  **Loading and Execution**
-<p>&nbsp;&nbsp;Script positioning</p>
+&nbsp;&nbsp;Script positioning
 > Most browsers use a single process for both user interface (UI) updates and JavaScript execution, so only one can happen at any given moment in time. 
 ***
 >Keep in mind that browsers don't start rendering anything on the page until the opening <body> tag is encountered. 
@@ -12,7 +12,8 @@
 >Because scripts block downloading of all resource types on the page, it's recommended to place all &lt;script&gt; tags as close to the bottom of the <body> tag as possible so as not to affect the download of the entire page.
 
 ***
-<p>&nbsp;&nbsp;Grouping Scripts</p>
+&nbsp;&nbsp;Grouping Scripts
+
 >Since each &lt;script&gt; tag blocks the page from rendering during initial download, it's helpful to limit the total number of &lt;script&gt; tags contained in the page. 
 
 ***eg:***
