@@ -134,20 +134,108 @@ Use the defer attribute of the &lt;script&gt; tag (Internet Explorer and Firefox
  Dynamically create &lt;script&gt; elements to download and execute the code
  Download the JavaScript code using an XHR object, and then inject the code into the page
 
+===
+
 *  **Data Access**
+
+> There are four basic places from which data can be accessed in JavaScript:
+
+> * Literal values: Any value that represents just itself and isn't stored in a particular location. JavaScript can represent strings, numbers, Booleans, objects, arrays, functions, regular expressions, and the special values null and undefined as literals.
+
+> * Variables: Any developer-defined location for storing data created by using the var keyword.
+
+> * Array items: A numerically indexed location within a JavaScript Array object.
+
+> * Object members: A string-indexed location within a JavaScript object.
+
+===
+***Managing Scope***
+
+***Scope Chains and Identifier Resolution***
+
+>Every function in JavaScript is represented as an objectmore specifically, as an instance of Function. Function objects have properties just like any other object, and these include both the properties that you can access programmatically and a series of internal properties that are used by the JavaScript engine but are not accessible through code. One of these properties is [[Scope]], as defined by ECMA-262.
+
+>A good rule of thumb is to always store out-of-scope values in local variables if they are used more than once within a function.
+
+***Scope Chain Augmentation***
+
+***Dynamic Scopes***
+
+>Both the with statement and the catch clause of a try-catch statement, as well as a function containing (), are all considered to be dynamic scopes. A dynamic scope is one that exists only through execution of code and therefore cannot be determined simply by static analysis (looking at the code structure). 
+
+***Closures, Scope, and Memory***
+
+>Closures are one of the most powerful aspects of JavaScript, allowing a function to access data that is outside of its local scope. The use of closures has been popularized through the writings of Douglas Crockford and is now ubiquitous in most complex web applications. There is, however, a performance impact associated with using closures.
+
+
+***Object Members***
+
+>Most JavaScript is written in an object-oriented manner, either through the creation of custom objects or the use of built-in objects such as those in the Document Object Model (DOM) and Browser Object Model (BOM). As such, there tends to be a lot of object member access.
+
+
+***Prototypes***
+
+>Objects in JavaScript are based on prototypes. A prototype is an object that serves as the base of another object, defining and implementing members that a new object must have. This is a completely different concept than the traditional object-oriented programming concept of classes, which define the process for creating a new object. Prototype objects are shared amongst all instances of a given object type, and so all instances also share the prototype object's members.
+
+
+
+>Objects can have two types of members: instance members (also called "own" members) and prototype members. Instance members exist directly on the object instance itself, whereas prototype members are inherited from the object prototype.
+
+
+***Prototype Chains***
+
+>The prototype of an object determines the type or types of which it is an instance. By default, all objects are instances of Object and inherit all of the basic methods, such as toString(). You can create a prototype of another type by defining and using a constructor. 
+
+***Nested Members***
+
+>Since object members may contain other members, it's not uncommon to see patterns such as window.location.href in JavaScript code. These nested members cause the JavaScript engine to go through the object member resolution process each time a dot is encountered. 
+
+
+>It should come as no surprise, then, that the deeper the nested member, the slower the data is accessed. Evaluating location.href is always faster than window.location.href, which is faster than window.location.href.toString(). If these properties aren't on the object instances, then member resolution will take longer as the prototype chain is searched at each point.
+
+
+***Caching Object Member Values***
+
+>Generally speaking, if you\'re going to read an object property more than one time in a function, it's best to store that property value in a local variable. The local variable can then be used in place of the property to avoid ￼￼￼￼￼the performance overhead of another property lookup. This is especially important when dealing with nested object members that have a more dramatic effect on execution speed.
+
+
+***Summary***
+
+>Where you store and access data in JavaScript can have a measurable impact on the overall performance of your code. There are four places to access data from: literal values, variables, array items, and object members. These locations all have different performance considerations.
+
+> * Literal values and local variables can be accessed very quickly, whereas array items and object members take longer.
+
+> * Local variables are faster to access than out-of-scope variables because they exist in the first variable object of the scope chain. The further into the scope chain a variable is, the longer it takes to access. Global variables are always the slowest to access because they are always last in the scope chain.
+
+> * Avoid the with statement because it augments the execution context scope chain. Also, be careful with the catch clause of a try-catch statement because it has the same effect.
+
+> * Nested object members incur significant performance impact and should be minimized.
+
+> * The deeper into the prototype chain that a property or method exists, the slower it is to access.
+
+> * Generally speaking, you can improve the performance of JavaScript code by storing frequently used object members, array items, and out-of-scope variables in local variables. You can then access the local variables faster than the originals.
+ 
 
 *  **DOM Scripting**
 
+===
+
+
 *  **Algorithms and Flow Control**
 
+===
 *  **Strings and RegExp**
 
+===
 *  **Responsive Interfaces**
 
+===
 *  **Ajax asynchronous & XML**
 
+===
 *  **Programming pratices**
 
+===
 *  **Building and deploying high-performance JS applications**
 
 
