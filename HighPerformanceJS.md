@@ -489,20 +489,191 @@ According to the DOM standard, each event has three phases:
 
 *  **Algorithms and Flow Control**
 
+>The overall structure of your code is one of the main determinants as to how fast it will execute. Having a very small amount of code doesn't necessarily mean that it will run quickly, and having a large amount of code doesn't necessarily mean that it will run slowly. A lot of the performance impact is directly related to how the code has been organized and how you're attempting to solve a given problem.
+
+**Loops**
+
+>In most programming languages, the majority of code execution time is spent within loops. Looping over a series of values is one of the most frequently used patterns in programming and as such is also one of the areas where efforts to improve performance must be focused. Understanding the performance impact of loops in JavaScript is especially important, as infinite or long-running loops severely impact the overall user experience.
+
+**Types of Loops**
+
+**Loop Performance**
+
+>A constant source of debate regarding loop performance is which loop to use. Of the four loop types provided by JavaScript, only one of them is significantly slower than the others: the for-in loop.
+
 ===
+>Since each iteration through the loop results in a property lookup either on the instance or on a prototype, the for-in loop has considerably more overhead per iteration and is therefore slower than the other loops. For the same number of loop iterations, a for-in loop can end up as much as seven times slower than the other loop types. For this reason, it's recommended to avoid the for-in loop unless your intent is to iterate over an unknown number of object properties. If you have a finite, known list of properties to iterate over, it is faster to use one of the other loop types and use a pattern such as this:
+
+`var props = ["prop1", "prop2"],`
+
+`i=0;`
+
+`while(i<props.length){`
+
+`process(obj[props[i]])`
+
+`}`
+
+>This code creates an array whose members are property names. The while loop is used to iterate over this small number of properties and process the appropriate member on object. Rather than looking up each and every property on object, the code focuses on only the properties of interest, saving loop overhead and time.
+
+===
+
+>If loop type doesn't contribute to loop performance, then what does? There are actually just two factors:
+
+> * Work done per iteration
+> * Number of iterations
+
+By decreasing either or both of these, you can positively impact the overall performance of the loop.
+
+**Decreasing the work per iteration**
+
+>You can also increase the performance of loops by reversing their order. Frequently, the order in which array items are processed is irrelevant to the task, and so starting at the last item and processing toward the first item is ￼￼￼￼an acceptable alternative. Reversing loop order is a common performance optimization in programming languages but generally isn't very well understood. In JavaScript, reversing a loop does result in a small performance improvement for loops, provided that you eliminate extra operations as a result:
+
+
+**Conditionals**
+
+**if-else Versus switch**
+
+>The prevailing theory on using if-else versus switch is based on the number of conditions being tested: the larger the number of conditions, the more inclined you are to use a switch instead of if-else. This typically comes down to which code is easier to read. The argument is that if-else is easier to read when there are fewer conditions and switch is easier to read when the number of conditions is large.
+
+**Recursion Patterns**
+
+Iteration
+
+>Any algorithm that can be implemented using recursion can also be implemented using iteration. Iterative algorithms typically consist of several different loops performing different aspects of the process, and thus introduce their own performance issues. However, using optimized loops in place of long-running recursive functions can result in performance improvements due to the lower overhead of loops versus that of executing a function.
+
+**Memoization**
+
+>Work avoidance is the best performance optimization technique. The less work your code has to do, the faster it executes. Along those lines, it also makes sense to avoid work repetition. Performing the same task multiple times is a waste of execution time. Memoization is an approach to avoid work repetition by caching previous calculations for later reuse, which makes memoization a useful technique for recursive algorithms.
+
+**Summary**
+
+>Just as with other programming languages, the way that you factor your code and the algorithm you choose affects the execution time of JavaScript. Unlike other programming languages, JavaScript has a restricted set of resources from which to draw, so optimization techniques are even more important.
+
+> * The for, while, and do-while loops all have similar performance characteristics, and so no one loop type is significantly faster or slower than the others.
+> * Avoid the for-in loop unless you need to iterate over a number of unknown object properties.
+> * The best ways to improve loop performance are to decrease the amount of work done per iteration and decrease the number of loop iterations.
+> * Generally speaking, switch is always faster than if-else, but isnt always the best solution.
+> * Lookup tables are a faster alternative to multiple condition evaluation using if-else or switch.
+> * Browser call stack size limits the amount of recursion that JavaScript is allowed to perform; stack overflow errors prevent the rest of the code from executing.
+> * If you run into a stack overflow error, change the method to an iterative algorithm or make use of memoization to avoid work repetition.
+
+>The larger the amount of code being executed, the larger the performance gain realized from using these strategies.
+
+===
+
+
+
 *  **Strings and RegExp**
+
+
+>Practically all JavaScript programs are intimately tied to strings. For example, many applications use Ajax to fetch strings from a server, convert those strings into more easily usable JavaScript objects, and then generate strings of HTML from the data. A typical program deals with numerous tasks like these that require you to merge, split, rearrange, search, iterate over, and otherwise handle strings; and as web applications become more complex, progressively more of this processing is done in the browser.
+
+**String Concatenation**
+
+>String concatenation can be surprisingly performance intensive. It's a common task to build a string by continually adding to the end of it in a loop (e.g., when building up an HTML table or an XML document), but this sort of processing is notorious for its poor performance in some browsers.
+
+Method            Example
+
+The + operator    str = "a" + "b" + "c";
+
+The += operator   str = "a"; str += "b"; str += "c";
+
+array.join()      str = ["a", "b", "c"].join('');
+
+string.concat()   str = "a"; str = str.concat("b", "c");
+
+>All of these methods are fast when concatenating a few strings here and there, so for casual use, you should go with whatever is the most practical. As the length and number of strings that must be merged increases, however, some methods start to show their strength.
+
 
 ===
 *  **Responsive Interfaces**
 
+**The Browser UI Thread**
+
+>The process shared by JavaScript and user interface updates is frequently referred to as the browser UI thread (though the term "thread" is not necessarily accurate for all browsers). The UI thread works on a simple queuing system where tasks are kept until the process is idle. Once idle, the next task in the queue is retrieved and executed. These tasks are either JavaScript code to execute or UI updates to perform, which include redraws and reflows (discussed in Chapter 3). Perhaps the most interesting part of this process is that each input may result in one or more tasks being added to the queue.
+
+**Browser Limits**
+
+>Browsers place limits on the amount of time that JavaScript take to execute. This is a necessary limitation to ensure that malicious coders can't lock up a user's browser or computer by performing intensive operations that will never end. There are two such limits: the call stack size limit (discussed in Chapter 4) and the long-running script limit. The long-running script limit is sometimes called the long-running script timer or the runaway script timer, but the basic idea is that the browser keeps track of how long a script has been running and will stop it once a certain limit is hit. 
+
+**How Long Is Too Long?**
+
+>If whole seconds are too long for JavaScript to execute, what is an appropriate amount of time? As it turns out, even one second is too long for a script to execute. The total amount of time that a single JavaScript operation should take (at a maximum) is 100 milliseconds. This number comes from research conducted by Robert Miller in 1968. Interestingly, usability expert Jakob Nielsen noted in his book Usability Engineering (Morgan Kaufmann, 1994) that this number hasn't changed over time and, in fact, was reaffirmed in 1991 by research at Xerox-PARC.
+
+
+**Yielding with Timers**
+
+>Despite your best efforts, there will be times when a JavaScript task cannot be completed in 100 milliseconds or less because of its complexity. In these cases, it's ideal to yield control of the UI thread so that UI updates may occur. Yielding control means stopping JavaScript execution and giving the UI a chance to update itself before continuing to execute the JavaScript. This is where JavaScript timers come into the picture.
+
+
+**Timer Basics**
+
+>The way that timers interact with the UI thread is helpful for breaking up long-running scripts into shorter segments. Calling setTimeout() or setInterval() tells the JavaScript engine to wait a certain amount of time and then add a JavaScript task to the UI queue.
+
+===
+
+>Keep in mind that the timer code can never be executed until after the function in which it was created is completely executed. For example, if the previous code is changed such that the timer delay is smaller and there is another function call after the timer is created, it's possible that the timer code will be queued before the onclick event handler has finished executing.
+
+
+**Timer Precision**
+
+>JavaScript timer delays are often imprecise, with slips of a few milliseconds in either direction. Just because you specify 250 milliseconds as the timer delay doesn't necessarily mean the task is queued exactly 250 milliseconds after setTimeout() is called. All browsers make an attempt to be as accurate as possible, but oftentimes a slip of a few milliseconds in either direction occurs. For this reason, timers are unreliable for measuring actual time passed.
+
+===
+>Timer resolution on Windows systems is 15 milliseconds, meaning that it will interpret a timer delay of 15 as either 0 or 15, depending on when the system time was last updated. Setting timer delays of less than 15 can cause browser locking in Internet Explorer, so the smallest recommended delay is 25 milliseconds (which will end up as either 15 or 30) to ensure a delay of at least 15 milliseconds.
+
+**Array Processing with Timers**
+
+>One common cause of long-running scripts is loops that take too long to execute. If you've already tried the loop optimization techniques presented in Chapter 4 but haven't been able to reduce the execution time enough, then timers are your next optimization step. The basic approach is to split up the loop's work into a series of timers.
+
+**Two determining factors for whether a loop can be done asynchronously using timers:**
+
+> * Does the processing have to be done synchronously?
+> * Does the data have to be processed sequentially?
+
+**Splitting Up Tasks**
+
+>What we typically think of as one task can often be broken down into a series of subtasks. If a single function is taking too long to execute, check to see whether it can be broken down into a series of smaller functions that complete in smaller amounts of time. This is often as simple as considering a single line of code as an atomic task, even though multiple lines of code typically can be grouped together into a single task. Some functions are already easily broken down based on the other functions they call. 
+
+**Timed Code**
+
+>If you keep 100 milliseconds in mind as the absolute maximum amount of time that JavaScript should be allowed to run continuously, then you can start optimizing the previous patterns. My recommendation is to cut that number in half and never let any JavaScript code execute for longer than 50 milliseconds continuously, just to make sure the code never gets close to affecting the user experience.
+
+
+===
+
+>It's possible to track how long a piece of code has been running by using the native Date object. This is the way most JavaScript profiling works.
+
+===
+
+>Since each new Date object is initialized with the current system time, you can time code by creating new Date objects periodically and comparing their values. The plus operator (+) converts the Date object into a numeric representation so that any further arithmetic doesn't involve conversions. This same basic technique can be used to optimize the previous timer patterns.
+
+
+**Timers and Performance**
+
+>Timers can make a huge difference in the overall performance of your JavaScript code, but overusing them can have a negative effect on performance. The code in this section has used sequenced timers such that only one timer exists at a time and new ones are created only when the last timer has finished. Using timers in this way will not result in performance issues.
+
+===
+
+>Thomas found that low-frequency repeating timersthose occurring at intervals of one second or greaterhad little effect on overall web application responsiveness. The timer delays in this case are too large to create a bottleneck on the UI thread and are therefore safe to use repeatedly. When multiple repeating timers are used with a much greater frequency (between 100 and 200 milliseconds), however, Thomas found that the mobile Gmail application became noticeably slower and less responsive.
+
+**Summary**
+
+>JavaScript and user interface updates operate within the same process, so only one can be done at a time. This means that the user interface cannot react to input while JavaScript code is executing and vice versa. Managing the UI thread effectively means ensuring that JavaScript isn't allowed to run so long that the user experience is affected. To that end, the following should be kept in mind:
+
+> * No JavaScript task should take longer than 100 milliseconds to execute. Longer execution times cause a noticeable delay in updates to the UI and negatively impact the overall user experience.
+> * Browsers behave differently in response to user interaction during JavaScript execution.
+Regardless of the behavior, the user experience becomes confusing and disjointed when JavaScript takes a long time to execute.
+> * Timers can be used to schedule code for later execution, which allows you to split up long-running scripts into a series of smaller tasks.
+> * Web workers are a feature in newer browsers that allow you to execute JavaScript code outside of the UI thread, thus preventing UI locking.
+
+
 ===
 *  **Ajax asynchronous & XML**
 
-===
-*  **Programming pratices**
 
-===
-*  **Building and deploying high-performance JS applications**
+
 
 
 
