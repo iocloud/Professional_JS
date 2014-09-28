@@ -271,4 +271,10 @@ function substrace(o,p){
 function isNative(fn){
   return (/\{\s*\[native code\]\s*\}/).test(''+fn);
 }
-
+function toArray(coll) {
+  // A function that copies an HTML collection into a regular array.
+  for(var i = 0, a = [], len = coll.length; i < len; i++) {
+    a[i] = coll[i];
+  }
+  return a;
+}
