@@ -672,6 +672,154 @@ Regardless of the behavior, the user experience becomes confusing and disjointed
 ===
 *  **Ajax asynchronous & XML**
 
+**Data Transmission**
+
+**Requesting Data**
+
+>There are five general techniques for requesting data from a server:
+
+> * XMLHttpRequest
+> * Dynamic scripting tag insertion
+> * iframes
+> * Comet
+> * Multipart XHR
+
+The three that are used in modern high-performance JavaScript are XHR, dynamic script tag insertion, and multipart XHR.
+
+
+**POST versus GET when using XHR**
+
+>When using XHR to request data, you have a choice between using POST or GET. For requests that don't change the server state and only pull back data (this is called an idempotent action), use GET. GET requests are cached, which can improve performance if you're fetching the same data several times.
+
+===
+>POST should be used to fetch data only when the length of the URL and the parameters are close to or exceed 2,048 characters. This is because Internet Explorer limits URLs to that length, and exceeding it will cause your request to be truncated.
+
+
+**Dynamic script tag insertion**
+
+>This technique overcomes the biggest limitation of XHR: it can request data from a server on a different domain. It is a hack; instead of instantiating a purpose-built object, you use JavaScript to create a new script tag and set its source attribute to a URL in a different domain.
+
+===
+
+>But dynamic script tag insertion offers much less control than XHR. You can't send headers with the request. Parameters can only be passed using GET, not POST. You can't set timeouts or retry the request; in fact, you won't necessarily know if it fails. You must wait for all of the data to be returned before you can access any of it. You don't have access to the response headers or to the entire response as a string.
+
+===
+>This last point is especially important. Because the response is being used as the source for a script tag, it must be executable JavaScript. You cannot use bare XML, or even bare JSON; any data, regardless of the format, must be enclosed in a callback function.
+
+**Multipart XHR**
+
+**Data Formats**
+
+> * XML
+> * XPath
+> * JSON
+
+
+**Cache Data**
+
+>The fastest Ajax request is one that you don't have to make. There are two main ways of preventing an unnecessary request:
+
+> * On the server side, set HTTP headers that ensure your response will be cached in the browser.
+> * On the client side, store fetched data locally so that it doesn't have be requested again.
+
+The first technique is the easiest to set up and maintain, whereas the second gives you the highest degree of control.
+
+**Setting HTTP header**
+
+If you want your Ajax responses to be cached by the browser, you must use GET to make the request. But simply using GET isn't sufficient; you must also send the correct HTTP headers with the response. The Expires header tells the browser how long a response can be cached. The value is a date; after that date has passed, any requests for that URL will stop being delivered from cache and will instead be passed on to the server. 
+
+`Expires: Mon, 28 Jul 2014 23:30:00 GMT`
+
+**Storing data locally**
+
+
+>A local cache also works well for users browsing on mobile devices. Most of the browsers on such devices have small or nonexistent caches, and a manual cache is the best option for preventing unnecessary requests.
+
+
+===
+*  **Programming pratices**
+
+**Lazy Loadin**
+
+`function addHandler(target, eventType, handler){`
+
+`if(target.addEventListener){//DOM2`
+
+`addHandler=function(target, eventType, handler){`
+
+`target.addEventListener(eventType, handler, false);`
+
+`};`
+
+`}else{//IE`
+
+`addHandler = function(target, eventType, handler){`
+
+`target.attachEvent('on'+eventType, handler)`
+
+`};`
+
+`}`
+
+>Calling a lazy-loading function always takes longer the first time because it must run the detection and then make a call to another function to accomplish the task. Subsequent calls to the same function, however, are much faster since they have no detection logic. Lazy loading is best used when the function won't be used immedi
+on the page.
+
+
+**Conditional Advance Loading**
+
+>An alternative to lazy-loading functions is conditional advance loading, which does the detection upfront, while the script is loading, instead of waiting for the function call. The detection is still done just once, but it comes earlier in the process.For example:
+
+`var addHandler = document.body.addEventListener?`
+
+`function(target, eventType, handler){`
+
+`target.addEventListener(eventType,handler,false);`
+
+`}:`
+
+`function(target, eventType, handler)`
+
+`target.attachEvent('on' + eventType, handler)`
+
+`};`
+
+>Conditional advance loading ensures that all calls to the function take the same amount of time. The trade-off is that the detection occurs as the script is loading rather than later. Advance loading is best to use when a function is going to be used right away and then again frequently throughout the lifetime of the page.
+
+
+
+**Use the fast parts**
+
+
+>Even though JavaScript is often blamed for being slow, there are parts of the language that are incredibly fast. This should come as no surprise, since JavaScript engines are built in lower-level languages and are therefore compiled. Though it's easy to blame the engine when JavaScript appears slow, the engine is typically the fastest part of the process; it's your code that is actually running slowly. There are parts of the engine that are much faster than others because they allow you to bypass the slow parts.
+
+
+**Bitwise operators**
+
+>JavaScript numbers are all stored in IEEE-754 64-bit format. For bitwise operations, though, the number is converted into a signed 32-bit representation. Each operator then works directly on this 32-bit representation to achieve a result. Despite the conversion, this process is incredibly fast when compared to other mathematical and Boolean operations in JavaScript.
+
+**There are four bitwise logic operators in JavaScript:**
+
+> * Bitwise AND: Returns a number with a 1 in each bit where both numbers have a 1
+> * Bitwise OR: Returns a number with a 1 in each bit where either number has a 1
+> * Bitwise XOR: Returns a number with a 1 in each bit where exactly one number has a 1
+> * Bitwise NOT: Returns 1 in each position where the number has a 0 and vice versa
+
+
+**Native Methods**
+
+>No matter how optimal your JavaScript code is, it will never be faster than the native methods provided by the JavaScript engine. The reason for this is simple: the native parts of JavaScript—those already present in the browser before you write a line of code—are all written in a lower-level language such as C++. That means these methods are compiled down to machine code as part of the browser and therefore don't have the same limitations as your JavaScript code.
+
+===
+>A common mistake of inexperienced JavaScript developers is to perform complex mathematical operations in code when there are better performing versions available on the built-in Math object. The Math object contains properties and methods designed to make mathematical operations easier. 
+
+
+**Summary**
+
+> * Avoid the double evaluation penalty by avoiding the use of eval() and Function() constructor. Also, pass function into setTimeout() and setInterval() instead of string.
+> * Use object and array literals when creating new objects and arrays. They are created and initialized faster than nonliteral forms.
+> * Avoid doing the same work repeatedly. Use lazy loading or conditional advance loading when browser-detection logic is necessary.
+> * When performing mathematical operations, consider using bitwise operators that work directly on the underlying representation of the number.
+> * Native methods are always faster than anything you can write in JavaScript. Use native methods whenever available.
 
 
 
